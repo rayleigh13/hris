@@ -1,10 +1,41 @@
+import { useState } from 'react'
 import { UserOutlined, LockOutlined, MailOutlined } from '@ant-design/icons'
-import { Button, Checkbox, Form, Input, Typography, Card } from 'antd'
+import { Button, Checkbox, Form, Input, Typography, Card, message } from 'antd'
+
+// ✅ Use API URL from .env
+const API_URL = import.meta.env.VITE_API_URL
 
 export default function RegisterPage() {
-  const onFinish = (values: any) => {
-    console.log('Register success:', values)
-    // TODO: Send values to your backend API for registration
+  const [loading, setLoading] = useState(false)
+
+  const onFinish = async (values: any) => {
+    setLoading(true)
+
+    try {
+      const res = await fetch(`${API_URL}/users/register`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          name: values.username,
+          email: values.email,
+          password: values.password
+        })
+      })
+
+      const data = await res.json()
+
+      if (res.ok) {
+        message.success("✅ Registration successful. You can now login.")
+        window.location.href = "/login"
+      } else {
+        message.error(data.message || "❌ Registration failed")
+      }
+    } catch (err) {
+      console.error(err)
+      message.error("⚠️ Server error. Try again later.")
+    } finally {
+      setLoading(false)
+    }
   }
 
   return (
@@ -99,7 +130,7 @@ export default function RegisterPage() {
 
           {/* Submit */}
           <Form.Item>
-            <Button type="primary" htmlType="submit" block>
+            <Button type="primary" htmlType="submit" block loading={loading}>
               Register
             </Button>
           </Form.Item>

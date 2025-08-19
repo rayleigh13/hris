@@ -1,13 +1,34 @@
 import express from "express";
-import bodyParser from "body-parser";
-import sequelize from "./config/database.js";
+import sequelize from "./src/config/database.js";
+import cors from "cors";
+import dotenv from "dotenv";
 
-import userRoutes from "./routes/userRoutes.js";
+import userRoutes from "./src/routes/userRoutes.js";
 
 const app = express();
 
-// middleware
-app.use(bodyParser.json());
+// CORS configuration to allow frontend requests
+const allowedOrigins = [
+    'http://localhost:5173'
+];
+
+app.use(cors({
+    origin: (origin, callback) => {
+        // Allow requests with no origin (like mobile apps or CURL requests)
+        if (!origin || allowedOrigins.includes(origin)) {
+            callback(null, true);
+        } else {
+            callback(new Error('Not allowed by CORS'));
+        }
+    },
+    credentials: true // Allow credentials such as cookies to be sent
+}));
+
+// ✅ JSON parser
+app.use(express.json());
+
+
+dotenv.config();
 
 // routes
 app.use("/api/users", userRoutes);
@@ -19,3 +40,7 @@ sequelize.authenticate()
 
 const PORT = process.env.PORT || 5000;
 app.listen(PORT, () => console.log(`🚀 Server running on port ${PORT}`));
+
+app.get("/", (req, res) => {
+  res.send("Backend is running 🚀");
+});
