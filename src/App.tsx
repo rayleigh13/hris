@@ -3,8 +3,9 @@ import { Link, Routes, Route, useLocation, Navigate } from 'react-router-dom'
 import {
   Layout, Menu, Typography, Space, Switch, ConfigProvider, theme as antdTheme
 } from 'antd'
-import { HomeOutlined, AppstoreOutlined, LoginOutlined } from '@ant-design/icons'
+import { HomeOutlined, AppstoreOutlined, LoginOutlined, UserOutlined } from '@ant-design/icons'
 import LoginPage from './pages/LoginPage'
+import RegisterPage from './pages/RegisterPage'
 
 const { Header, Sider, Content, Footer } = Layout
 
@@ -24,15 +25,19 @@ export default function App() {
   const [isDark, setIsDark] = useState(false)
   const location = useLocation()
 
-  // ✅ If user is at /login → show LoginPage only (no layout)
+  // ✅ If user is at /login or /register → show only the page (no layout)
   if (location.pathname === '/login') {
     return <LoginPage />
+  }
+  if (location.pathname === '/register') {
+    return <RegisterPage />
   }
 
   const items = [
     { key: '/', icon: <HomeOutlined />, label: <Link to="/">Home</Link> },
     { key: '/products', icon: <AppstoreOutlined />, label: <Link to="/products">Products</Link> },
     { key: '/login', icon: <LoginOutlined />, label: <Link to="/login">Login</Link> },
+    { key: '/register', icon: <UserOutlined />, label: <Link to="/register">Register</Link> },
   ]
 
   return (
@@ -83,7 +88,7 @@ export default function App() {
                 <Route path="/products" element={
                   isAuthenticated ? <Products /> : <Navigate to="/login" replace />
                 } />
-                {/* /login is handled outside */}
+                {/* login & register are handled outside */}
               </Routes>
             </div>
           </Content>

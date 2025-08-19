@@ -56,6 +56,9 @@ export default function LoginPage() {
             </Button>
           </Form.Item>
         </Form>
+        <Typography.Paragraph style={{ textAlign: 'center' }}>
+          Don’t have an account? <a href="/register">Register here</a>
+        </Typography.Paragraph>
       </Card>
     </div>
   )
