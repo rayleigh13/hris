@@ -34,40 +34,41 @@ export const loginUser = async (req, res) => {
   try {
     const { email, password } = req.body;
 
-    // Validate input
+    // ✅ Validate input
     if (!email || !password) {
       return res.status(400).json({ message: "Email and password are required" });
     }
 
-    // Find user by email
+    // ✅ Find user by email
     const user = await User.findOne({ where: { email } });
     if (!user) {
       return res.status(400).json({ message: "Invalid credentials" });
     }
 
-    // Compare password
+    // ✅ Compare password
     const isMatch = await bcrypt.compare(password, user.password);
     if (!isMatch) {
       return res.status(400).json({ message: "Invalid credentials" });
     }
 
-    // Generate JWT
+    // ✅ Generate JWT
     const token = jwt.sign(
       { id: user.id, email: user.email },
       process.env.JWT_SECRET,
       { expiresIn: "1h" }
     );
 
-    // Send response without password
+    // ✅ Exclude password from response
     const { password: _password, ...userData } = user.toJSON();
-    res.json({
+
+    return res.json({
       message: "Login successful",
       user: userData,
       token,
     });
   } catch (err) {
     console.error("Login error:", err);
-    res.status(500).json({ error: "Server error" });
+    return res.status(500).json({ message: "Server error" }); // ✅ unified message key
   }
 };
 

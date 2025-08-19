@@ -1,0 +1,25 @@
+.sidebar-title {
+  font-size: 12px;
+  color: #888;
+  font-weight: bold;
+  padding: 16px 24px 8px 24px;
+  letter-spacing: 1px;
+  background: #fff;
+  display: block;
+}
+.ant-menu-item, .ant-menu-submenu-title {
+  padding-left: 24px !important;
+  font-size: 15px;
+  color: #1a2340 !important;
+  height: 40px !important;
+  display: flex;
+  align-items: center;
+}
+.ant-menu-item:hover, .ant-menu-submenu-title:hover {
+  background: #f5f6fa !important;
+  color: #1677ff !important;
+}
+.ant-menu-item-selected {
+  background: #f0f5ff !important;
+  color: #1677ff !important;
+}
